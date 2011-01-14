@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang='ru'>
+<head>
+    {% block head -%}
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta charset="utf-8">
+    <title>{% block title %} - microb.example.com{% endblock %}</title>
+    <link href="/static/css/style.css" rel="stylesheet"/>
+    {%- endblock head %}
+</head>
+<body>
+<div id="container">
+    <div id="header">
+        <a id="header_title" href="/">microb.example.com</a><br/>
+    </div>
+    <div id="content">
+        {% block content -%}
+        {%- endblock content %}
+    </div>
+</div>
+</body>
+</html>
+

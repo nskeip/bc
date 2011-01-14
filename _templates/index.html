@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{{super()}}{% endblock title %}
+
+{% block content -%}
+<ul class="txt">
+    {% for p in posts -%}
+    <li>
+        <h2><span class="post_title"><a href="#">{{p.title}}</a></span></h2>
+        <p>{{p.text|safe}}</p>
+    </li>
+    {%- endfor %}
+</ul>
+{%- endblock content %}
+

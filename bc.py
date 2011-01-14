@@ -9,7 +9,11 @@ SITE_URL = 'http://localhost'
 
 # fuckyeahbrainlambda!
 ext_cleaner = lambda f: f.replace('.yaml', '.html')
-post_url = lambda post: '%s'
+
+# post_url - to use in jinja2
+# maybe later it will be used for directories support
+# or maybe fuck that - i'm too lazy
+post_url = (lambda post: '%s/%s' % SITE_URL, ext_cleaner(post['_filename']))
 
 loader = lambda d, f: dict(_directory=d, 
                            _filename=f,

@@ -10,11 +10,6 @@ SITE_URL = 'http://localhost'
 # fuckyeahbrainlambda!
 ext_cleaner = lambda f: f.replace('.yaml', '.html')
 
-# post_url - to use in jinja2
-# maybe later it will be used for directories support
-# or maybe fuck that - i'm too lazy
-post_url = (lambda post: '%s/%s' % SITE_URL, ext_cleaner(post['_filename']))
-
 loader = lambda d, f: dict(_directory=d, 
                            _filename=f,
                            _output=os.path.join(OUTPUT_DIR, d,ext_cleaner(f)),
@@ -26,13 +21,26 @@ def get_yamls(ext='yaml', func=loader):
                 for filename in filenames
                     if filename.endswith(ext)]
 
+# a simple url_for - no directories support
+def url_for(endpoint, **kwargs):
+    if endpoint == 'index':
+        pattern = '/'
+    elif endpoint == 'static':
+        pattern = '/static/%(filename)s'
+    else:
+        pattern = '/%(filename)s'
+    
+    return pattern % kwargs
+
 jinja_env = Environment(loader=FileSystemLoader(JINJA2_TEMPLATE_DIR))
+
+jinja_env.globals['url_for'] = url_for
 
 def render_template(template, return_response=True, **context):
     return jinja_env.get_template(template).render(**context)
 
 def write_to_page(output_path, template, **template_kwargs):
-    text = render_template('one.html', **template_kwargs)
+    text = render_template(template, **template_kwargs)
     f = open(output_path, mode='w')
     f.write(text)
     f.close()

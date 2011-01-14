@@ -15,7 +15,6 @@ loader = lambda d, f: dict(_directory=d,
                            _output=os.path.join(OUTPUT_DIR, d, ext_cleaner(f)),
                            **load(open(os.path.join(d, f))))
 
-
 # this is how your posts' urls are built
 def post_url(post, external=False):
     if not external:

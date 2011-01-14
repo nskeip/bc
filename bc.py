@@ -17,10 +17,11 @@ loader = lambda d, f: dict(_directory=d,
 
 # this is how your posts' urls are built
 def post_url(post, external=False):
+    post_filename = post['_filename']
     if not external:
-        return '/%s' % ext_cleaner(p)
+        return '/%s' % ext_cleaner(post_filename)
     else:
-        return '%s/%s' % SITE_URL, ext_cleaner(p)
+        return '%s/%s' % SITE_URL, ext_cleaner(post_filename)
 
 
 def get_yamls(ext='yaml', func=loader):

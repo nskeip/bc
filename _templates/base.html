@@ -4,18 +4,23 @@
     {% block head -%}
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <meta charset="utf-8">
-    <title>{% block title %}some blog, ok{% endblock %}</title>
-    <link href="{{url_for('static', filename='css/style.css', external=True)}}" rel="stylesheet"/>
+    <title>{% block title %} - some blog, ok{% endblock %}</title>
+    <link href="./static/css/style.css" rel="stylesheet"/>
     {%- endblock head %}
 </head>
 <body>
-<div id="container">
     <div id="container">
-       <div id="header"></div>
-       <div id="body"></div>
-       <div id="footer"></div>
+        <div id="header">
+            <h1>An awesome blog;)</h1>
+        </div>
+        <div id="body">
+        {% block content -%}
+        {%- endblock content %}
+        </div>
+        <div id="footer">
+            &copy; by someone
+        </div>
     </div>
-</div>
 </body>
 </html>
 

@@ -3,11 +3,11 @@
 {% block title %}Home{{super()}}{% endblock title %}
 
 {% block content -%}
-<ul class="txt">
+<ul>
     {% for p in posts -%}
     <li>
-        <h2><span class="post_title"><a href="#">{{p.title}}</a></span></h2>
-        <p>{{p.text|safe}}</p>
+        <h2><a href="{{url_for('post', post=p)}}">{{p.title}}</a></h2>
+        <p>{{p.text}}</p>
     </li>
     {%- endfor %}
 </ul>

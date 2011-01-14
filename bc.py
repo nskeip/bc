@@ -16,6 +16,7 @@ loader = lambda d, f: dict(_directory=d,
                            **load(open(os.path.join(d, f))))
 
 
+# this is how your posts' urls are built
 def post_url(post, external=False):
     if not external:
         return '/%s' % ext_cleaner(p)
@@ -45,7 +46,7 @@ def url_for(endpoint, external=False, **kwargs):
     elif endpoint == 'static':
         pattern = '/static/%(filename)s'
     elif endpoint == 'post':
-        pattern = post_url(kwargs['post'])
+        pattern = post_url(kwargs['post'], external)
     else:
         raise UnknownEndpointException(endpoint)
 

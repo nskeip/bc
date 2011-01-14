@@ -10,10 +10,18 @@ SITE_URL = 'http://localhost'
 # fuckyeahbrainlambda!
 ext_cleaner = lambda f: f.replace('.yaml', '.html')
 
-loader = lambda d, f: dict(_directory=d, 
+loader = lambda d, f: dict(_directory=d,
                            _filename=f,
-                           _output=os.path.join(OUTPUT_DIR, d,ext_cleaner(f)),
+                           _output=os.path.join(OUTPUT_DIR, d, ext_cleaner(f)),
                            **load(open(os.path.join(d, f))))
+
+
+def post_url(post, external=False):
+    if not external:
+        return '/%s' % ext_cleaner(p)
+    else:
+        return '%s/%s' % SITE_URL, ext_cleaner(p)
+
 
 def get_yamls(ext='yaml', func=loader):
     for dirname, dirnames, filenames in os.walk('.'):
@@ -21,23 +29,39 @@ def get_yamls(ext='yaml', func=loader):
                 for filename in filenames
                     if filename.endswith(ext)]
 
+
+class UnknownEndpointException(Exception):
+    def __init__(self, endpoint):
+        self.endpoint = endpoint
+
+    def __str__(self):
+        return repr('I don\'t know such endpoint: %s' % self.endpoint)
+
+
 # a simple url_for - no directories support
-def url_for(endpoint, **kwargs):
+def url_for(endpoint, external=False, **kwargs):
     if endpoint == 'index':
         pattern = '/'
     elif endpoint == 'static':
         pattern = '/static/%(filename)s'
+    elif endpoint == 'post':
+        pattern = post_url(kwargs['post'])
     else:
-        pattern = '/%(filename)s'
-    
-    return pattern % kwargs
+        raise UnknownEndpointException(endpoint)
+
+    if not external:
+        return pattern % kwargs
+    else:
+        return SITE_URL + pattern % kwargs
 
 jinja_env = Environment(loader=FileSystemLoader(JINJA2_TEMPLATE_DIR))
 
 jinja_env.globals['url_for'] = url_for
 
+
 def render_template(template, return_response=True, **context):
     return jinja_env.get_template(template).render(**context)
+
 
 def write_to_page(output_path, template, **template_kwargs):
     text = render_template(template, **template_kwargs)
@@ -45,9 +69,10 @@ def write_to_page(output_path, template, **template_kwargs):
     f.write(text)
     f.close()
 
+
 def main():
     posts = get_yamls()
-    
+
     #render index.html and all posts' pages
     write_to_page(os.path.join(OUTPUT_DIR, 'index.html'),
                   'index.html',
@@ -57,4 +82,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

@@ -1,7 +1,11 @@
 #-*- coding: UTF-8 -*-
 import os
+import sys
 from yaml import load
 from jinja2 import Environment, FileSystemLoader
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 OUTPUT_DIR = './_build'
 JINJA2_TEMPLATE_DIR = './_templates'
@@ -25,9 +29,9 @@ get_yamls = lambda ext='.yaml', func=loader: \
 def post_url(post, external=False):
     post_filename = post['_filename']
     if not external:
-        return '/%s' % ext_cleaner(post_filename)
+        return '%s' % ext_cleaner(post_filename)
     else:
-        return '%s/%s' % SITE_URL, ext_cleaner(post_filename)
+        return '%s/%s' % (SITE_URL, ext_cleaner(post_filename),)
 
 
 class UnknownEndpointException(Exception):
@@ -45,7 +49,7 @@ def url_for(endpoint, external=False, **kwargs):
     elif endpoint == 'static':
         pattern = '/static/%(filename)s'
     elif endpoint == 'post':
-        pattern = post_url(kwargs['post'], external)
+        return post_url(kwargs['post'], external)
     else:
         raise UnknownEndpointException(endpoint)
 

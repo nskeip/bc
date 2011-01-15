@@ -15,6 +15,12 @@ loader = lambda d, f: dict(_directory=d,
                            _output=os.path.join(OUTPUT_DIR, d, ext_cleaner(f)),
                            **load(open(os.path.join(d, f))))
 
+get_yamls = lambda ext='.yaml', func=loader: \
+                    sorted([loader('.', f) 
+                            for f in os.listdir('.') 
+                                if f.endswith(ext)], 
+                           reverse=True)
+
 # this is how your posts' urls are built
 def post_url(post, external=False):
     post_filename = post['_filename']
@@ -22,13 +28,6 @@ def post_url(post, external=False):
         return '/%s' % ext_cleaner(post_filename)
     else:
         return '%s/%s' % SITE_URL, ext_cleaner(post_filename)
-
-
-def get_yamls(ext='yaml', func=loader):
-    for dirname, dirnames, filenames in os.walk('.'):
-        return [func(dirname, filename)
-                for filename in filenames
-                    if filename.endswith(ext)]
 
 
 class UnknownEndpointException(Exception):

@@ -4,23 +4,27 @@
     {% block head -%}
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <meta charset="utf-8">
-    <title>{% block title %} - some blog, ok{% endblock %}</title>
+    <title>{% block title %} - ns-keip.ru{% endblock %}</title>
     <link href="./static/css/style.css" rel="stylesheet"/>
     {%- endblock head %}
 </head>
 <body>
-    <div id="container">
-        <div id="header">
-            <h1>An awesome blog;)</h1>
-        </div>
-        <div id="body">
-        {% block content -%}
-        {%- endblock content %}
-        </div>
-        <div id="footer">
-            &copy; by someone
-        </div>
+<a href="http://github.com/nskeip"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://assets1.github.com/img/71eeaab9d563c2b3c590319b398dd35683265e85?repo=&url=http%3A%2F%2Fs3.amazonaws.com%2Fgithub%2Fribbons%2Fforkme_right_gray_6d6d6d.png&path=" alt="Fork me on GitHub"></a>
+    <div id='wrapper' class='content'>
+        <header>{% block logo %}ns-keip.ru{% endblock logo %}</header>
+        <nav>
+            <ul>
+                <li><a href='http://twitter.com/nskeip' rel='nofollow'>twitter</a></li>
+                <li><a href='http://last.fm/user/playa-hater/' rel='nofollow'>last.fm</a></li>
+                <li><a href='http://stackoverflow.com/users/388585/ns-keip' rel='nofollow'>stackoverflow</a></li>
+            </ul>
+        </nav>
+        <section class='text'>
+            {% block content %}
+            {% endblock content %}
+        </section>
+    <div id="page-empty"></div>
     </div>
+    <footer>powered by <a href='https://github.com/nskeip/bc/'>bc aka BlogCompiler</a></footer>
 </body>
 </html>
-

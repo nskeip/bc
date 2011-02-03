@@ -2,11 +2,12 @@
 
 {% block title %}{{post.title}}{{super()}}{% endblock title %}
 
-{% block content -%}
-<div class="txt">
-    <h1><span class="post_title">{{post.title}}</span></h1>
-    {% if post.date %}<p>{{post.date.strftime('%d.%m.%Y')}}</p>{% endif %}
-    {{post.text|safe}}
-</div>
-{%- endblock content %}
+{% block logo %}<a href='/'>{{super()}}</a>{% endblock logo %}
 
+{% block content -%}
+<article>
+<h1 class='post_title'>{{post.title}}</h1>
+{% if post.date %}<span class='post_date'>{{post.date}}</span><br/>{% endif %}
+{{post.text|safe}}
+</article>
+{%- endblock content %}

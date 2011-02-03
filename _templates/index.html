@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{{super()}}{% endblock title %}
+{% block title %}Глагне{{super()}}{% endblock title %}
 
 {% block content -%}
-<ul>
+<ul class='listing'>
     {% for p in posts -%}
     <li>
-        <h2><a href="{{url_for('post', post=p)}}">{{p.title}}</a></h2>
-        <p>{{p.text}}</p>
+        <article>
+        <h2 class='post_title'>{{p.title}}</h2>
+        {% if p.date %}<span class='post_date'>{{p.date}}</span><br/>{% endif %}
+        {{p.text | truncate(120) }}
+        {% if p.text | length > 120 %}<br/><a href='{{url_for("post", post=p)}}'>MOAR!&nbsp;&rarr;</a>{% endif %}
+        </article>
     </li>
     {%- endfor %}
 </ul>

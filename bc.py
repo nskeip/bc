@@ -12,6 +12,7 @@ sys.setdefaultencoding('utf-8')
 OUTPUT_DIR = './_build'
 JINJA2_TEMPLATE_DIR = './_templates'
 SITE_URL = 'http://localhost'
+TYPOGRAPH=True
 
 # fuckyeahbrainlambda!
 ext_cleaner = lambda f: f.replace('.yaml', '.html')
@@ -66,7 +67,6 @@ jinja_env.globals['url_for'] = url_for
 
 
 def typo(text):
-    print "TYPO...", text
     rt = RemoteTypograf()
     rt.htmlEntities()
     rt.br(1)
@@ -83,12 +83,16 @@ def typo_post(p):
         return p
 
 
-def render_template(template, return_response=True, typo=True, **context):
+def render_template(template, return_response=True, typo=TYPOGRAPH, **context):
     context_copy = copy(context)
-    if 'text' in context_copy:
-        context_copy['text'] = typo(context_copy['text'])
-    elif 'posts' in context_copy:
-        context_copy['posts'] = [typo_post(p) for p in context_copy['posts']]
+    if typo:
+        if 'post' in context_copy:
+            post = context_copy['post']
+            if 'text' in post:
+                context_copy['post'] = typo_post(post)
+        elif 'posts' in context_copy:
+            context_copy['posts'] = [typo_post(p) for p in context_copy['posts']]
+
     return jinja_env.get_template(template).render(**context_copy)
 
 

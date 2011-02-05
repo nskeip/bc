@@ -3,6 +3,8 @@ import os
 import sys
 from yaml import load
 from jinja2 import Environment, FileSystemLoader
+from RemoteTypograf import RemoteTypograf
+from copy import copy
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -63,8 +65,31 @@ jinja_env = Environment(loader=FileSystemLoader(JINJA2_TEMPLATE_DIR))
 jinja_env.globals['url_for'] = url_for
 
 
-def render_template(template, return_response=True, **context):
-    return jinja_env.get_template(template).render(**context)
+def typo(text):
+    print "TYPO...", text
+    rt = RemoteTypograf()
+    rt.htmlEntities()
+    rt.br(1)
+    rt.p(1)
+    return rt.processText(text)
+
+
+def typo_post(p):
+    if 'text' in p:
+        post_copy = copy(p)
+        post_copy['text'] = typo(post_copy['text'])
+        return post_copy
+    else:
+        return p
+
+
+def render_template(template, return_response=True, typo=True, **context):
+    context_copy = copy(context)
+    if 'text' in context_copy:
+        context_copy['text'] = typo(context_copy['text'])
+    elif 'posts' in context_copy:
+        context_copy['posts'] = [typo_post(p) for p in context_copy['posts']]
+    return jinja_env.get_template(template).render(**context_copy)
 
 
 def write_to_page(output_path, template, **template_kwargs):
